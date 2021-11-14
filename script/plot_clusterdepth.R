@@ -125,5 +125,5 @@ gg_depth_depth <-
 gg_cdepth = gg_depth_f+gg_depth_depth+  
   plot_annotation(
     title = 'Distribution by cluster-depth',
-    caption = "The clusters are aligned by cluster-depth and we compute the null distribution for each cluster depth.",
+    caption = "The clusters are aligned by cluster-depth and we compute the null distribution\nfor each cluster depth.",
   theme = theme_jf())

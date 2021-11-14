@@ -13,6 +13,7 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
+class: left, middle
 
 
 ```{r xaringanExtra, echo=FALSE}
@@ -52,21 +53,27 @@ source("script/plot_cluster.R",echo = F)
 source("script/plot_cluster_hist.R",echo = F)
 source("script/plot_problem_clustermass.R",echo = F)
 source("script/plot_clusterdepth.R",echo = F)
+source("script/plot_cdepth_hist.R",echo = F)
 
 
 ```
 
 
-## Table of Contents
+## Table of Content
 
+- Testing Conditions in EEG
+    - Family wise error rate (FWER)
+    - Parametric vs non-parametric tests
+- Max-T/min-p procedure
+- Cluster mass test
+- Cluster depth tests
 
 
 ---
-class: center, middle
+class: left, top
 
-.pull-left[
-# Testing in EEG
-]
+
+## Testing Conditions in EEG
 
 
 
@@ -127,13 +134,24 @@ Declaring significant 1 time point of a null hypothesis constitutes a type 1 err
 
 $$\text{FWER} = \text{Prob}(V>0)$$
 
+---
+
+class: center, top
+
+### Univariate Tests under H0
+
+.center[
+```{r bonf, echo=FALSE, fig.height=6, fig.width=10, warning=FALSE, dev="svg"}
+gg_bonf
+```
+]
 
 ---
 class: left, top
 
 #### Example: 
 - Running 10'000 experiments where **only random noise** is observed. 
-- 500 of them contain at least 1 significant time point using the method $\mathcal{M}$. 
+- On average, 500 of them contain at least 1 significant time point using the statistical method $\mathcal{M}$. 
 - $\mathcal{M}$ has a FWER of $\text{FWER}=500/10000 = 5\%$.
 
 --
@@ -147,24 +165,10 @@ class: left, top
 
 
 ---
-
-class: center, top
-
-### Univariate Tests under H0
-
-.center[
-```{r bonf, echo=FALSE, fig.height=6, fig.width=10, warning=FALSE, dev="svg"}
-gg_bonf
-```
-
-
-]
-
----
 class: center, middle, inverse
 
 
-### Multiple comparison procedures based on resampling 
+### Multiple comparisons procedures based on resampling 
 
 
 ---
@@ -229,7 +233,7 @@ We will declare falsely at least 1 significant time point every $\alpha_{\text{F
 ]
 
 ---
-class: left, middle
+class: left, top
 
 ### Step-wise argument
 
@@ -299,6 +303,34 @@ gg_fp
 ```
 
 
+---
+class: center, middle, inverse
+
+# The threshold-free cluster enhancement (TFCE)
+
+
+---
+class: left, top
+
+## Rationale
+
+- Removing the threshold the need of a threshold.
+- Integral over all thresholds.
+- Controlling the FWER using a max-T argument.
+
+
+$$\text{TFCE}_s =\int_{h = 0}^{h=T_s} e(h)^E h^H \text{d}h$$
+
+.center[https://benediktehinger.de/blog/science/tag/tfce/]
+
+--
+ 
+In EEG, we often use $E=0.5$ and $H=1$ or $H=2$, depending on the statistic (t or F).
+
+When $E<1$, the influence of the length of a cluster is small. It has the advantage to decreases the risk of false positive at the border of true effects.
+
+
+
 
 ---
 class: center, middle, inverse
@@ -314,19 +346,19 @@ class: left, top
 ## Rational
 
 
-- From the cluster mass test, we *keep the threshold* defining clusters.
-- We reject the idea of a cluster mass. We *do not aggregate the statistics*.
+- From the cluster mass test, we **keep the threshold** defining clusters.
+- We reject the idea of a cluster mass. We **do not aggregate the statistics**.
 
 
-- The cluster depth is the position of a time point *relatively to the border of the cluster*.
-- we define cluster depth "from the head" and "from the tail".
+- The cluster depth is the position of a time point __relatively to the border of the cluster__.
+- The cluster depth can be defined "from the head" or "from the tail".
 
 --
 
 .center[
-We test relatively to the cluster-depth: "The first time point a cluster is under H0." 
+We test relatively to the cluster depth: "The first time point a cluster is under H0." 
 
-H0: *No difference at the 1st cluster depth* from the head.
+H0: __No difference at the 1st cluster depth__ from the head.
 
 Then, we generalized to all cluster-depths.
 ]
@@ -338,6 +370,16 @@ class: left, top
 ```{r cdepth, echo=FALSE, fig.height=8, fig.width=10, warning=FALSE, dev="svg"}
 gg_cdepth
 ```
+
+
+---
+class: left, top
+
+```{r cdepth_hist, echo=FALSE, fig.height=8, fig.width=10, warning=FALSE, dev="svg"}
+gg_cdepth_hist
+```
+
+
 
 
 ---
