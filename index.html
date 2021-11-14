@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>The Cluster Depth Tests</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Jaromil Frossard" />
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
+    <link href="libs/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view-0.2.6/tile-view.js"></script>
+    <script src="libs/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <script src="libs/fabric-4.3.1/fabric.min.js"></script>
+    <link href="libs/xaringanExtra-scribble-0.0.1/scribble.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-scribble-0.0.1/scribble.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', function() { window.xeScribble = new Scribble({"pen_color":["#FF0000"],"pen_size":3,"eraser_size":30,"palette":[]}) })</script>
+    <script src="libs/xaringanExtra_fit-screen-0.2.6/fit-screen.js"></script>
+    <script src="libs/xaringanExtra-progressBar-0.0.1/progress-bar.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# The Cluster Depth Tests
+## Massively Univariate Tests for EEG
+### Jaromil Frossard
+### University of Geneva
+### 2021/11/14 (updated: 2021-11-14)
+
+---
+
+
+
+<style>.xe__progress-bar__container {
+  top:0;
+  opacity: 1;
+  position:absolute;
+  right:0;
+  left: 0;
+}
+.xe__progress-bar {
+  height: 0.25em;
+  background-color: #0051BA;
+  width: calc(var(--slide-current) / var(--slide-total) * 100%);
+}
+.remark-visible .xe__progress-bar {
+  animation: xe__progress-bar__wipe 200ms forwards;
+  animation-timing-function: cubic-bezier(.86,0,.07,1);
+}
+@keyframes xe__progress-bar__wipe {
+  0% { width: calc(var(--slide-previous) / var(--slide-total) * 100%); }
+  100% { width: calc(var(--slide-current) / var(--slide-total) * 100%); }
+}</style>
+
+
+
+
+
+
+## Table of Contents
+
+
+
+---
+class: center, middle
+
+.pull-left[
+# Testing in EEG
+]
+
+
+
+
+![](index_files/figure-html/erps-1.svg)&lt;!-- --&gt;
+
+---
+class: left, top
+
+### Multiple Tests
+
+.center[
+600 ms at 512Hz = 614 Time-Points!
+]
+
+--
+
+#### Several approaches:
+
+- Pre-selecting a few tests (prior knowledge, miss effects)
+- Average over a time frame (prior knowledge, interpretation on the time window)
+- Testing all time-points (Large FWER) 👎
+- Testing all time-points + multiple comparisons procedure. 👍
+
+--
+
+#### Multiple comparisons procedure:
+
+- Parametric: Bonferroni, Holm
+- Point-wise non-parametric: min-p/max-T (Westfall and Young 1993) , Troendle (Troendle 1995)
+- Cluster-wise non-parametric: Cluster Mass Test (Maris and Oostenveld 2007), TFCE (Smith and Nichols 2009)
+- Hybrid non-parametric: Cluster Depth Tests (Frossard and Renaud 2021)
+
+
+---
+class: left, top
+
+### Family-Wise Error Rate
+
+#### Definition
+- `\(\text{FWER} = \text{Prob}(\text{At least 1 type 1 Error})\)`.
+- Probability of reporting at least one false positive.
+
+When we observe signals of length `\(m\)`, some time points are under the **null hypothesis** the other are under the **alternative hypothesis**.
+
+Declaring significant 1 time point of a null hypothesis constitutes a type 1 error.
+
+--
+
+|       |non-significant|significant|        |
+|:------|:-------------:|:---------:|:------:|
+|True H0| U             |V          | m0     |
+|True HA| T             |S          | m - m0 |
+|       |m-R            |R          |m       |
+
+
+`$$\text{FWER} = \text{Prob}(V&gt;0)$$`
+
+
+---
+class: left, top
+
+#### Example: 
+- Running 10'000 experiments where **only random noise** is observed. 
+- 500 of them contain at least 1 significant time point using the method `\(\mathcal{M}\)`. 
+- `\(\mathcal{M}\)` has a FWER of `\(\text{FWER}=500/10000 = 5\%\)`.
+
+--
+
+#### Bonferroni
+
+- We change the univariate `\(\alpha\)`'s to `\(\alpha/m\)`.
+- We multiply the univariate p-values by `\(m\)`.
+- 👍 We only need univariate p-values.
+- 👎 Low power.
+
+
+---
+
+class: center, top
+
+### Univariate Tests under H0
+
+.center[
+![](index_files/figure-html/bonf-1.svg)&lt;!-- --&gt;
+
+
+]
+
+---
+class: center, middle, inverse
+
+
+### Multiple comparison procedures based on resampling 
+
+
+---
+class: left, top
+
+### Max-T/ min-p
+
+`\begin{align}
+\text{FWER} &amp;= \text{Prob}_{\text{H}_0}\left(\text{At least one statistic } T_i &gt; \text{critical } T^*\right)\\
+&amp;= \text{Prob}_{\text{H}_0}\left(\text{max}_i(T_i) &gt; \text{critical } T^*\right)
+\end{align}`
+
+.center[
+Same rational with p-values using the minimum!
+]
+
+--
+
+### Distribution of the maximum
+
+- Depend on the correlation between the tests.
+- A parametric model of the correlation may not be accurate.
+- Permutation tests capture the correlation under H0.
+
+---
+class: left, top
+
+
+![](index_files/figure-html/perm-1.svg)&lt;!-- --&gt;
+
+
+---
+class: left, top
+
+
+![](index_files/figure-html/perm_hist-1.svg)&lt;!-- --&gt;
+
+
+---
+class: left, middle
+
+### Pluses and minuses
+
+- 👍 Point-wise interpretation.
+- 👍 Take into account the correlation.
+- 👍 More powerful than parametric methods.
+- 👎 Fail when there is to manly equivalent uncorrelated tests.
+- 👎 Do not take into account the spatio-temporal distribution of the tests.
+- 👎 For min-p, when the number of test is too large, we need to increase the number of permutations.
+
+### Interpretation
+
+
+.center[
+We take an `\(\alpha_{\text{FWER}}\)` level risk when we concluding: "All significant time points are under H1".
+
+We will declare falsely at least 1 significant time point every `\(\alpha_{\text{FWER}}\)` experiments containing time points under H0.
+]
+
+---
+class: left, middle
+
+### Step-wise argument
+
+1. We sort the observed statistics `\(T_{(1)}&gt;\dots&gt;T_{(i)}&gt;\dots&gt; T_{(m)}\)`.
+2. We use the multiple comparison procedure `\(\mathcal{M}_{1..m}\)` for the decision of the hypothesis `\(H_{(1)}\)` associated to `\(T_{(1)}\)`.
+3. If we cannot reject `\(H_{(1)}\)`, then we cannot reject `\(H_{(1)},\dots,H_{(m)}\)`
+4. If we reject `\(H_{(1)}\)`, then 2 cases is possible. We correctly reject `\(H_{(1)}\)`, the decision procedure `\(\mathcal{M}_{1..m}\)` can be updated to `\(\mathcal{M}_{2..m}\)` for the next hypothesis. We falsely rejected `\(H_{(1)}\)`, we commit a type 1 error, we can choose the procedure we want for the next hypothesis `\(H_{(2)},\dots,H_{(m)}\)` as it will not change the FWER.
+
+
+--
+
+### Step-wise procedure
+
+- Bonferroni + Step-wise =&gt; Holm
+- min-p + Step-wise =&gt; Troendle
+
+---
+class: center, middle, inverse
+
+
+# Cluster-based resampling procedure: the cluster mass test
+
+---
+class: left, top
+
+
+![](index_files/figure-html/cluster-1.svg)&lt;!-- --&gt;
+
+
+---
+class: left, top
+
+
+![](index_files/figure-html/hist_cluster-1.svg)&lt;!-- --&gt;
+
+
+---
+class: left, top
+
+### Pluses and minuses
+
+- 👍 Take into account the spatio-temporal position of the tests.
+- 👍 Very powerful.
+- 👎 True discoveries include many false positives.
+- 👎 Cluster-wise interpretation
+- 👎 Weak control of the FWER.
+
+--
+### Interpretation
+
+
+.center[
+We take an `\(\alpha_{\text{FWER}}\)` level risk when concluding: "There is at least 1 time point under H1".
+
+When **all time points** are under H0, we have a `\(\alpha_{\text{FWER}}\)` probability to observed a significant cluster.
+]
+
+---
+class: left, top
+
+![](index_files/figure-html/problem-1.svg)&lt;!-- --&gt;
+
+
+
+---
+class: center, middle, inverse
+
+
+# The cluster depth tests: a point-wise interpretation 
+
+
+---
+class: left, top
+
+
+## Rational
+
+
+- From the cluster mass test, we *keep the threshold* defining clusters.
+- We reject the idea of a cluster mass. We *do not aggregate the statistics*.
+
+
+- The cluster depth is the position of a time point *relatively to the border of the cluster*.
+- we define cluster depth "from the head" and "from the tail".
+
+--
+
+.center[
+We test relatively to the cluster-depth: "The first time point a cluster is under H0." 
+
+H0: *No difference at the 1st cluster depth* from the head.
+
+Then, we generalized to all cluster-depths.
+]
+
+
+---
+class: left, top
+
+![](index_files/figure-html/cdepth-1.svg)&lt;!-- --&gt;
+
+
+---
+class: left, top
+
+# References
+
+- Frossard, J., &amp; Renaud, O. (2021). The Cluster Depth Tests: Toward Point-Wise Strong Control of the Family-Wise Error Rate in Massively Univariate Tests with Application to M/EEG. *arXiv preprint arXiv:2105.07514*.
+- Maris, E., &amp; Oostenveld, R. (2007). Nonparametric statistical testing of EEG-and MEG-data. *Journal of neuroscience methods, 164*(1), 177-190.
+- Smith, S. M., &amp; Nichols, T. E. (2009). Threshold-free cluster enhancement: addressing problems of smoothing, threshold dependence and localisation in cluster inference. *Neuroimage, 44*(1), 83-98.
+- Tipura, E., Renaud, O., &amp; Pegna, A. J. (2019). Attention shifting and subliminal cueing under high attentional load: an EEG study using emotional faces. *Neuroreport, 30*(18), 1251-1255.
+- Troendle, J. F. (1995). A stepwise resampling method of multiple hypothesis testing. *Journal of the American Statistical Association, 90*(429), 370-378.
+- Westfall, P. H., &amp; Young, S. S. (1993). *Resampling-based multiple testing: Examples and methods for p-value adjustment* (Vol. 279). John Wiley &amp; Sons.
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
