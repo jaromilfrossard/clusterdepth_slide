@@ -27,7 +27,7 @@ class: center, middle, inverse, title-slide
 ## Massively Univariate Tests for EEG
 ### Jaromil Frossard
 ### University of Geneva
-### 2021/11/14 (updated: 2021-11-14)
+### 2021/11/14 (updated: 2021-11-15)
 
 ---
 
@@ -94,19 +94,19 @@ class: left, top
 
 #### Several approaches:
 
-- Pre-selecting a few tests (prior knowledge, miss effects)
-- Average over a time frame (prior knowledge, interpretation on the time window)
-- Testing all time-points (Large FWER) 👎
+- Pre-selecting a few tests (*a prior* knowledge, miss effects)
+- Average over a time frame (*a prior* knowledge, interpretation on the time window)
+- Testing all time-points (increase FWER) 👎
 - Testing all time-points + multiple comparisons procedure. 👍
 
 --
 
 #### Multiple comparisons procedure:
 
-- Parametric: Bonferroni, Holm
+- Parametric: Bonferroni (Dunn 1958), Holm (Holm 1979)
 - Point-wise non-parametric: min-p/max-T (Westfall and Young 1993) , Troendle (Troendle 1995)
 - Cluster-wise non-parametric: Cluster Mass Test (Maris and Oostenveld 2007), TFCE (Smith and Nichols 2009)
-- Hybrid non-parametric: Cluster Depth Tests (Frossard and Renaud 2021)
+- Hybrid non-parametric: Cluster Depth Tests (Frossard and Renaud 2021a)
 
 
 ---
@@ -120,21 +120,31 @@ class: left, top
 
 When we observe signals of length `\(m\)`, some time points are under the **null hypothesis** the other are under the **alternative hypothesis**.
 
-Declaring significant 1 time point of a null hypothesis constitutes a type 1 error.
+Declaring significant 1 time point that comes from a null hypothesis constitutes a type 1 error.
 
---
+-- 
 
-|       |non-significant|significant|        |
-|:------|:-------------:|:---------:|:------:|
-|True H0| U             |V          | m0     |
-|True HA| T             |S          | m - m0 |
-|       |m-R            |R          |m       |
+#### Bonferroni
+
+- We change the univariate `\(\alpha\)`'s to `\(\alpha/m\)`.
+- We multiply the univariate p-values by `\(m\)`.
+- 👍 We only need univariate p-values.
+- 👎 Low power.
 
 
-`$$\text{FWER} = \text{Prob}(V&gt;0)$$`
+
+&lt;!-- -- --&gt;
+
+&lt;!-- |       |non-significant|significant|        | --&gt;
+&lt;!-- |:------|:-------------:|:---------:|:------:| --&gt;
+&lt;!-- |True H0| U             |V          | m0     | --&gt;
+&lt;!-- |True HA| T             |S          | m - m0 | --&gt;
+&lt;!-- |       |m-R            |R          |m       | --&gt;
+
+
+&lt;!-- `$$\text{FWER} = \text{Prob}(V&gt;0)$$` --&gt;
 
 ---
-
 class: center, top
 
 ### Univariate Tests under H0
@@ -143,22 +153,17 @@ class: center, top
 ![](index_files/figure-html/bonf-1.svg)&lt;!-- --&gt;
 ]
 
----
-class: left, top
+&lt;!-- --- --&gt;
+&lt;!-- class: left, top --&gt;
 
-#### Example: 
-- Running 10'000 experiments where **only random noise** is observed. 
-- On average, 500 of them contain at least 1 significant time point using the statistical method `\(\mathcal{M}\)`. 
-- `\(\mathcal{M}\)` has a FWER of `\(\text{FWER}=500/10000 = 5\%\)`.
+&lt;!-- #### Example:  --&gt;
+&lt;!-- - Running 10'000 experiments where **only random noise** is observed.  --&gt;
+&lt;!-- - On average, 500 of them contain at least 1 significant time point using the statistical method `\(\mathcal{M}\)`.  --&gt;
+&lt;!-- - `\(\mathcal{M}\)` has a FWER of `\(\text{FWER}=500/10000 = 5\%\)`. --&gt;
 
---
+&lt;!-- -- --&gt;
 
-#### Bonferroni
 
-- We change the univariate `\(\alpha\)`'s to `\(\alpha/m\)`.
-- We multiply the univariate p-values by `\(m\)`.
-- 👍 We only need univariate p-values.
-- 👎 Low power.
 
 
 ---
@@ -186,9 +191,9 @@ Same rational with p-values using the minimum!
 
 ### Distribution of the maximum
 
-- Depend on the correlation between the tests.
-- A parametric model of the correlation may not be accurate.
-- Permutation tests capture the correlation under H0.
+- Depend on the **correlation between the tests**.
+- **No parametric model** of the correlation between test is accurate.
+- **Permutation tests** capture the correlation under H0.
 
 ---
 class: left, top
@@ -211,18 +216,16 @@ class: left, middle
 
 - 👍 Point-wise interpretation.
 - 👍 Take into account the correlation.
-- 👍 More powerful than parametric methods.
+- 👍 More powerful than Bonferroni-Holm.
 - 👎 Fail when there is to manly equivalent uncorrelated tests.
 - 👎 Do not take into account the spatio-temporal distribution of the tests.
 - 👎 For min-p, when the number of test is too large, we need to increase the number of permutations.
 
+
 ### Interpretation
 
-
 .center[
-We take an `\(\alpha_{\text{FWER}}\)` level risk when we concluding: "All significant time points are under H1".
-
-We will declare falsely at least 1 significant time point every `\(\alpha_{\text{FWER}}\)` experiments containing time points under H0.
+We take an `\(\alpha_{\text{FWER}}\)` level risk when we concluding: "Each significant time points are under H1".
 ]
 
 ---
@@ -230,18 +233,22 @@ class: left, top
 
 ### Step-wise argument
 
-1. We sort the observed statistics `\(T_{(1)}&gt;\dots&gt;T_{(i)}&gt;\dots&gt; T_{(m)}\)`.
-2. We use the multiple comparison procedure `\(\mathcal{M}_{1..m}\)` for the decision of the hypothesis `\(H_{(1)}\)` associated to `\(T_{(1)}\)`.
-3. If we cannot reject `\(H_{(1)}\)`, then we cannot reject `\(H_{(1)},\dots,H_{(m)}\)`
-4. If we reject `\(H_{(1)}\)`, then 2 cases is possible. We correctly reject `\(H_{(1)}\)`, the decision procedure `\(\mathcal{M}_{1..m}\)` can be updated to `\(\mathcal{M}_{2..m}\)` for the next hypothesis. We falsely rejected `\(H_{(1)}\)`, we commit a type 1 error, we can choose the procedure we want for the next hypothesis `\(H_{(2)},\dots,H_{(m)}\)` as it will not change the FWER.
+1. Sorting the observed statistics `\(T_{(1)}&gt;\dots&gt;T_{(i)}&gt;\dots&gt; T_{(m)}\)`.
+2. Using the Bonferroni procedure for the decision of the hypothesis `\(H_{(1)}\)` associated to `\(T_{(1)}\)` while considering the hypothesis `\(H_{(1)},\dots,H_{(m)}\)` ($\tilde p_{(1)} =,p_{(1)}$).
+3. If we do not reject `\(H_{(1)}\)`, then we do not reject `\(H_{(1)},\dots,H_{(m)}\)`
+4. If we reject `\(H_{(1)}\)`, 
+
+    a.  We correctly rejected `\(H_{(1)}\)`. We can  only consider `\(H_{(2)},\dots,H_{(m)}\)` when testing `\(H_{(2)}\)` ( `\(\tilde p_{(2)} =p_{(2)}*(m-1)\)` ).
+    
+    b. We falsely rejected `\(H_{(1)}\)`. We can also only consider `\(H_{(2)},\dots,H_{(m)}\)` when testing `\(H_{(2)}\)` ( `\(\tilde p_{(2)} =p_{(2)}*(m-1)\)` ).
 
 
 --
 
 ### Step-wise procedure
 
-- Bonferroni + Step-wise =&gt; Holm
-- min-p + Step-wise =&gt; Troendle
+- Bonferroni + Step-wise argument =&gt; Holm
+- min-p + Step-wise argument =&gt; Troendle
 
 ---
 class: center, middle, inverse
@@ -363,14 +370,49 @@ class: left, top
 ![](index_files/figure-html/cdepth_hist-1.svg)&lt;!-- --&gt;
 
 
+---
+class: left, top
 
+
+### Interpretation
+
+- We take a `\(\alpha_{\text{FWER}}\)` when we declare: "We found at least one cluster that begin no later at time `\(t_0\)`...
+
+
+### Work in progress
+
+- Combining cluster depth *from the head* and *from the tail* to find the starting and ending of the clusters. 
+- Implementation in `permuco` (Frossard and Renaud 2021b): the p-values are the time-wise maximal `\(p\)`-values between the cluster depth *from the head* and *from the tail*.
+
+
+---
+class: left, top
+
+### `permuco`
+
+cran: https://CRAN.R-project.org/package=permuco/
+github: https://github.com/jaromilfrossard/permuco/
+website: https://jaromilfrossard.github.io/permuco/
+article: https://www.jstatsoft.org/article/view/v099i15/
+
+### `permuco4brain`
+
+github: https://github.com/jaromilfrossard/permuco4brain/
+website: jaromilfrossard.github.io/permuco4brain/
+
+--
+
+[Rscript](https://github.com/jaromilfrossard/clusterdepth_slide/script_clusterdepth.R)
 
 ---
 class: left, top
 
 # References
 
-- Frossard, J., &amp; Renaud, O. (2021). The Cluster Depth Tests: Toward Point-Wise Strong Control of the Family-Wise Error Rate in Massively Univariate Tests with Application to M/EEG. *arXiv preprint arXiv:2105.07514*.
+- Dunn, O. J. (1958). Estimation of the means of dependent variables. *The Annals of Mathematical Statistics, 1095-1111*.
+- Frossard, J., &amp; Renaud, O. (2021a). The Cluster Depth Tests: Toward Point-Wise Strong Control of the Family-Wise Error Rate in Massively Univariate Tests with Application to M/EEG. *arXiv preprint arXiv:2105.07514*.
+- Frossard, J., &amp; Renaud, O. (2021b). Permutation Tests for Regression, ANOVA, and Comparison of Signals: The permuco Package. Journal of Statistical Software, 99, 1-32.
+- Holm, S. (1979). A simple sequentially rejective multiple test procedure. *Scandinavian journal of statistics*, 65-70.
 - Maris, E., &amp; Oostenveld, R. (2007). Nonparametric statistical testing of EEG-and MEG-data. *Journal of neuroscience methods, 164*(1), 177-190.
 - Smith, S. M., &amp; Nichols, T. E. (2009). Threshold-free cluster enhancement: addressing problems of smoothing, threshold dependence and localisation in cluster inference. *Neuroimage, 44*(1), 83-98.
 - Tipura, E., Renaud, O., &amp; Pegna, A. J. (2019). Attention shifting and subliminal cueing under high attentional load: an EEG study using emotional faces. *Neuroreport, 30*(18), 1251-1255.
