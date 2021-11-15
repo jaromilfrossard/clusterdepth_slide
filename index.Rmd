@@ -119,11 +119,11 @@ class: left, top
 - $\text{FWER} = \text{Prob}(\text{At least 1 type 1 Error})$.
 - Probability of reporting at least one false positive.
 
-When we observe signals of length $m$, some time points are under the **null hypothesis** the other are under the **alternative hypothesis**.
+<!-- When we observe signals of length $m$, some time points are under the **null hypothesis** the other are under the **alternative hypothesis**. -->
 
-Declaring significant 1 time point that comes from a null hypothesis constitutes a type 1 error.
+Declaring significant only 1 time point that comes from a null hypothesis constitutes a type 1 error.
 
--- 
+--
 
 #### Bonferroni
 
@@ -232,7 +232,7 @@ class: left, middle
 ### Interpretation
 
 .center[
-We take an $\alpha_{\text{FWER}}$ level risk when we concluding: "Each significant time points are under H1".
+We take an $\alpha_{\text{FWER}}$ level risk when concluding: "All significant time points are under H1".
 ]
 
 ---
@@ -240,19 +240,16 @@ class: left, top
 
 ### Step-wise argument
 
-1. Sorting the observed statistics $T_{(1)}>\dots>T_{(i)}>\dots> T_{(m)}$.
-2. Using the Bonferroni procedure for the decision of the hypothesis $H_{(1)}$ associated to $T_{(1)}$ while considering the hypothesis $H_{(1)},\dots,H_{(m)}$ ($\tilde p_{(1)} =,p_{(1)}$).
+1. **Sort the observed statistics** $T_{(1)}>\dots>T_{(i)}>\dots> T_{(m)}$.
+2. Use the Bonferroni procedure for the decision of the hypothesis $H_{(1)}$ while considering the hypothesis $H_{(1)},\dots,H_{(m)}$ ($\tilde p_{(1)} =,p_{(1)}$).
 3. If we do not reject $H_{(1)}$, then we do not reject $H_{(1)},\dots,H_{(m)}$
-4. If we reject $H_{(1)}$, 
-
-    a.  We correctly rejected $H_{(1)}$. We can  only consider $H_{(2)},\dots,H_{(m)}$ when testing $H_{(2)}$ ( $\tilde p_{(2)} =(m-1) p_{(2)}$ ).
-    
-    b. We falsely rejected $H_{(1)}$. We can also only consider $H_{(2)},\dots,H_{(m)}$ when testing $H_{(2)}$ ( $\tilde p_{(2)} =(m-1) p_{(2)}$ ).
-
+4. If we reject $H_{(1)}$:
+    + a. If we correctly rejected $H_{(1)}$. We can  only consider $H_{(2)},\dots,H_{(m)}$ when testing $H_{(2)}$ ( $\tilde p_{(2)} =(m-1) p_{(2)}$ ).
+    + b. We falsely rejected $H_{(1)}$. We can also only consider $H_{(2)},\dots,H_{(m)}$ when testing $H_{(2)}$ ( $\tilde p_{(2)} =(m-1) p_{(2)}$ ).
 
 --
 
-### Step-wise procedure
+### Step-wise procedures
 
 - Bonferroni + Step-wise argument => Holm
 - min-p + Step-wise argument => Troendle
@@ -408,23 +405,26 @@ class: left, top
 ### `permuco`
 
 cran: https://CRAN.R-project.org/package=permuco/
+
 github: https://github.com/jaromilfrossard/permuco/
+
 website: https://jaromilfrossard.github.io/permuco/
+
 article: https://www.jstatsoft.org/article/view/v099i15/
 
-### `permuco4brain`
+### `permuco4brain` (multi channel analysis)
 
 github: https://github.com/jaromilfrossard/permuco4brain/
+
 website: jaromilfrossard.github.io/permuco4brain/
 
---
 
-[Rscript](https://github.com/jaromilfrossard/clusterdepth_slide/script_clusterdepth.R)
+[Rscript](https://github.com/jaromilfrossard/clusterdepth_slide/blob/main/script_clusterdepth.R)
 
 ---
 class: left, top
 
-# References
+## References (1/2)
 
 - Dunn, O. J. (1958). Estimation of the means of dependent variables. *The Annals of Mathematical Statistics, 1095-1111*.
 - Frossard, J., & Renaud, O. (2021a). The Cluster Depth Tests: Toward Point-Wise Strong Control of the Family-Wise Error Rate in Massively Univariate Tests with Application to M/EEG. *arXiv preprint arXiv:2105.07514*.
@@ -433,6 +433,12 @@ class: left, top
 - Maris, E., & Oostenveld, R. (2007). Nonparametric statistical testing of EEG-and MEG-data. *Journal of neuroscience methods, 164*(1), 177-190.
 - Smith, S. M., & Nichols, T. E. (2009). Threshold-free cluster enhancement: addressing problems of smoothing, threshold dependence and localisation in cluster inference. *Neuroimage, 44*(1), 83-98.
 - Tipura, E., Renaud, O., & Pegna, A. J. (2019). Attention shifting and subliminal cueing under high attentional load: an EEG study using emotional faces. *Neuroreport, 30*(18), 1251-1255.
+
+---
+class: left, top
+
+## References (2/2)
+
 - Troendle, J. F. (1995). A stepwise resampling method of multiple hypothesis testing. *Journal of the American Statistical Association, 90*(429), 370-378.
 - Westfall, P. H., & Young, S. S. (1993). *Resampling-based multiple testing: Examples and methods for p-value adjustment* (Vol. 279). John Wiley & Sons.
 
