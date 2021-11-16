@@ -54,6 +54,7 @@ source("script/plot_cluster_hist.R",echo = F)
 source("script/plot_problem_clustermass.R",echo = F)
 source("script/plot_clusterdepth.R",echo = F)
 source("script/plot_cdepth_hist.R",echo = F)
+source("script/model_all_multcomp.R",echo = F)
 
 
 ```
@@ -217,6 +218,15 @@ gg_hist_maxt
 
 
 ---
+class: left, top
+
+
+```{r signal_maxt, echo=FALSE, fig.height=8, fig.width=10, warning=FALSE, dev="svg"}
+gg_signal_maxt
+```
+
+
+---
 class: left, middle
 
 ### Pluses and minuses
@@ -281,6 +291,14 @@ gg_hist_cm
 ---
 class: left, top
 
+
+```{r signal_cm, echo=FALSE, fig.height=8, fig.width=10, warning=FALSE, dev="svg"}
+gg_signal_cm
+```
+
+---
+class: left, top
+
 ### Pluses and minuses
 
 - `r emo::ji("+1")` Take into account the spatio-temporal position of the tests.
@@ -333,6 +351,14 @@ In EEG, we often use $E=0.5$ and $H=1$ or $H=2$, depending on the statistic (t o
 
 When $E<1$, the influence of the length of a cluster is small. It has the advantage to decreases the risk of false positive at the border of true effects.
 
+
+---
+class: left, top
+
+
+```{r signal_tfce, echo=FALSE, fig.height=8, fig.width=10, warning=FALSE, dev="svg"}
+gg_signal_tfce
+```
 
 
 
@@ -387,10 +413,15 @@ gg_cdepth_hist
 ---
 class: left, top
 
+### Control the FWER amoung all cluster depth tests
+
+- Interpreting the univariate cluster depth tests will increase the FWER.
+- We use Troendle (min-p + step-wise arguments) as it is powerful when the tests have different univariate distributions.
+
 
 ### Interpretation
 
-- We take a $\alpha_{\text{FWER}}$ when we declare: "We found at least one cluster that begin no later at time $t_0$...
+- We take a $\alpha_{\text{FWER}}$ when we declare: "We found at least one cluster that begins no later than time $t_0$."
 
 
 ### Work in progress
@@ -398,6 +429,15 @@ class: left, top
 - Combining cluster depth *from the head* and *from the tail* to find the starting and ending of the clusters. 
 - Implementation in `permuco` (Frossard and Renaud 2021b): the p-values are the time-wise maximal $p$-values between the cluster depth *from the head* and *from the tail*.
 
+
+
+---
+class: left, top
+
+
+```{r signal_cd, echo=FALSE, fig.height=8, fig.width=10, warning=FALSE, dev="svg"}
+gg_signal_cd
+```
 
 ---
 class: left, top

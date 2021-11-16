@@ -27,7 +27,7 @@ class: center, middle, inverse, title-slide
 ## Massively Univariate Tests for EEG
 ### Jaromil Frossard
 ### University of Geneva
-### 2021/11/14 (updated: 2021-11-15)
+### 2021/11/14 (updated: 2021-11-16)
 
 ---
 
@@ -210,6 +210,13 @@ class: left, top
 
 
 ---
+class: left, top
+
+
+![](index_files/figure-html/signal_maxt-1.svg)&lt;!-- --&gt;
+
+
+---
 class: left, middle
 
 ### Pluses and minuses
@@ -270,6 +277,12 @@ class: left, top
 ---
 class: left, top
 
+
+![](index_files/figure-html/signal_cm-1.svg)&lt;!-- --&gt;
+
+---
+class: left, top
+
 ### Pluses and minuses
 
 - 👍 Take into account the spatio-temporal position of the tests.
@@ -321,6 +334,12 @@ In EEG, we often use `\(E=0.5\)` and `\(H=1\)` or `\(H=2\)`, depending on the st
 When `\(E&lt;1\)`, the influence of the length of a cluster is small. It has the advantage to decreases the risk of false positive at the border of true effects.
 
 
+---
+class: left, top
+
+
+![](index_files/figure-html/signal_tfce-1.svg)&lt;!-- --&gt;
+
 
 
 ---
@@ -370,10 +389,15 @@ class: left, top
 ---
 class: left, top
 
+### Control the FWER amoung all cluster depth tests
+
+- Interpreting the univariate cluster depth tests will increase the FWER.
+- We use Troendle (min-p + step-wise arguments) as it is powerful when the tests have different univariate distributions.
+
 
 ### Interpretation
 
-- We take a `\(\alpha_{\text{FWER}}\)` when we declare: "We found at least one cluster that begin no later at time `\(t_0\)`...
+- We take a `\(\alpha_{\text{FWER}}\)` when we declare: "We found at least one cluster that begins no later than time `\(t_0\)`."
 
 
 ### Work in progress
@@ -381,6 +405,13 @@ class: left, top
 - Combining cluster depth *from the head* and *from the tail* to find the starting and ending of the clusters. 
 - Implementation in `permuco` (Frossard and Renaud 2021b): the p-values are the time-wise maximal `\(p\)`-values between the cluster depth *from the head* and *from the tail*.
 
+
+
+---
+class: left, top
+
+
+![](index_files/figure-html/signal_cd-1.svg)&lt;!-- --&gt;
 
 ---
 class: left, top

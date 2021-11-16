@@ -970,7 +970,7 @@
   <path d="M 681.75 370.367188 L 709.042969 370.367188 L 709.042969 472.488281 L 681.75 472.488281 Z M 681.75 370.367188 "/>
 </clipPath>
 </defs>
-<g id="surface74">
+<g id="surface104">
 <rect x="0" y="0" width="720" height="576" style="fill:rgb(100%,100%,100%);fill-opacity:1;stroke:none;"/>
 <rect x="0" y="0" width="720" height="576" style="fill:rgb(91.372549%,92.156863%,93.333333%);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:1.066978;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(91.372549%,92.156863%,93.333333%);stroke-opacity:1;stroke-miterlimit:10;" d="M 0 576 L 720 576 L 720 0 L 0 0 Z M 0 576 "/>
