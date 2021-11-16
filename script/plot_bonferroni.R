@@ -50,12 +50,12 @@ gg_p<-
   scale_x_continuous(expand = c(0,0))+
   labs(x="time [ms]", y = "p-value")+
   geom_hline(yintercept = 0.05,colour = "black")+
-  geom_hline(yintercept = 0.05/ncol(ymat),colour = "red")+
+#  geom_hline(yintercept = 0.05/ncol(ymat),colour = "red")+
   theme_jf()
 
 gg_bonf<-
   (gg_f/gg_p)+
   plot_annotation(
     title = 'F-Statistic and p-value under H0',
-    subtitle = 'In the bottom panel, the univariate (black) and\nBonferroni (red) threshold are shown.',
+    subtitle = 'The horizontal line represents univariate significant\n threshold',
     theme = theme_jf())

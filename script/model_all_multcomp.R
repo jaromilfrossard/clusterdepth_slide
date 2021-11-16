@@ -54,8 +54,8 @@ gg_signal_maxt<-
   ggplot(aes(x=time_ms,y=fstat))+
   geom_point()+
   geom_line()+
-  labs(title = "Max-T multiple comparison procedure",
-       subtitle = "Significant p-pvalue in red",
+  labs(title = "Max-T multiple comparisons procedure",
+       subtitle = "Significant p-value in red",
        x = "time [ms]", y = "F statistic")+
   geom_point(data= filter(data$tb_pvalue,pvalue_maxt<0.05),color="red")+
   theme_jf()

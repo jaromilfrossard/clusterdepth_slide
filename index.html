@@ -90,7 +90,6 @@ class: left, top
 600 ms at 512Hz = 614 Time-Points!
 ]
 
---
 
 #### Several approaches:
 
@@ -109,6 +108,12 @@ class: left, top
 - Hybrid non-parametric: Cluster Depth Tests (Frossard and Renaud 2021a)
 
 
+
+---
+class: center, top
+
+![](index_files/figure-html/bonf-1.svg)&lt;!-- --&gt;
+
 ---
 class: left, top
 
@@ -120,9 +125,21 @@ class: left, top
 
 &lt;!-- When we observe signals of length `\(m\)`, some time points are under the **null hypothesis** the other are under the **alternative hypothesis**. --&gt;
 
-Declaring significant only 1 time point that comes from a null hypothesis constitutes a type 1 error.
-
 --
+
+#### Classification of hypothesis
+
+|       |non-significant|significant|        |
+|:------|:-------------:|:---------:|:------:|
+|True H0| U             |V          | m0     |
+|True HA| T             |S          | m - m0 |
+|       |m-R            |R          |m       |
+
+
+
+
+---
+class: left, top
 
 #### Bonferroni
 
@@ -133,25 +150,17 @@ Declaring significant only 1 time point that comes from a null hypothesis consti
 
 
 
-&lt;!-- -- --&gt;
 
-&lt;!-- |       |non-significant|significant|        | --&gt;
-&lt;!-- |:------|:-------------:|:---------:|:------:| --&gt;
-&lt;!-- |True H0| U             |V          | m0     | --&gt;
-&lt;!-- |True HA| T             |S          | m - m0 | --&gt;
-&lt;!-- |       |m-R            |R          |m       | --&gt;
+
+
+
+
+
 
 
 &lt;!-- `$$\text{FWER} = \text{Prob}(V&gt;0)$$` --&gt;
 
----
-class: center, top
 
-### Univariate Tests under H0
-
-.center[
-![](index_files/figure-html/bonf-1.svg)&lt;!-- --&gt;
-]
 
 &lt;!-- --- --&gt;
 &lt;!-- class: left, top --&gt;
@@ -287,8 +296,8 @@ class: left, top
 
 - 👍 Take into account the spatio-temporal position of the tests.
 - 👍 Very powerful.
-- 👎 True discoveries include many false positives.
-- 👎 Cluster-wise interpretation
+- 👎 Significant clusters include many false positives.
+- 👎 Cluster-wise interpretation.
 - 👎 Weak control of the FWER.
 
 --
@@ -391,8 +400,8 @@ class: left, top
 
 ### Control the FWER amoung all cluster depth tests
 
-- Interpreting the univariate cluster depth tests will increase the FWER.
-- We use Troendle (min-p + step-wise arguments) as it is powerful when the tests have different univariate distributions.
+- Interpreting the univariate cluster depth tests increases the FWER.
+- We use Troendle (min-p + step-wise argument) as it is powerful when the tests have different univariate distributions.
 
 
 ### Interpretation

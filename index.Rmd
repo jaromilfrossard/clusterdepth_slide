@@ -92,7 +92,6 @@ class: left, top
 600 ms at 512Hz = 614 Time-Points!
 ]
 
---
 
 #### Several approaches:
 
@@ -111,6 +110,14 @@ class: left, top
 - Hybrid non-parametric: Cluster Depth Tests (Frossard and Renaud 2021a)
 
 
+
+---
+class: center, top
+
+```{r bonf, echo=FALSE, fig.height=6, fig.width=10, warning=FALSE, dev="svg"}
+gg_bonf
+```
+
 ---
 class: left, top
 
@@ -122,9 +129,21 @@ class: left, top
 
 <!-- When we observe signals of length $m$, some time points are under the **null hypothesis** the other are under the **alternative hypothesis**. -->
 
-Declaring significant only 1 time point that comes from a null hypothesis constitutes a type 1 error.
-
 --
+
+#### Classification of hypothesis
+
+|       |non-significant|significant|        |
+|:------|:-------------:|:---------:|:------:|
+|True H0| U             |V          | m0     |
+|True HA| T             |S          | m - m0 |
+|       |m-R            |R          |m       |
+
+
+
+
+---
+class: left, top
 
 #### Bonferroni
 
@@ -135,27 +154,17 @@ Declaring significant only 1 time point that comes from a null hypothesis consti
 
 
 
-<!-- -- -->
 
-<!-- |       |non-significant|significant|        | -->
-<!-- |:------|:-------------:|:---------:|:------:| -->
-<!-- |True H0| U             |V          | m0     | -->
-<!-- |True HA| T             |S          | m - m0 | -->
-<!-- |       |m-R            |R          |m       | -->
+
+
+
+
+
 
 
 <!-- $$\text{FWER} = \text{Prob}(V>0)$$ -->
 
----
-class: center, top
 
-### Univariate Tests under H0
-
-.center[
-```{r bonf, echo=FALSE, fig.height=6, fig.width=10, warning=FALSE, dev="svg"}
-gg_bonf
-```
-]
 
 <!-- --- -->
 <!-- class: left, top -->
@@ -303,8 +312,8 @@ class: left, top
 
 - `r emo::ji("+1")` Take into account the spatio-temporal position of the tests.
 - `r emo::ji("+1")` Very powerful.
-- `r emo::ji("-1")` True discoveries include many false positives.
-- `r emo::ji("-1")` Cluster-wise interpretation
+- `r emo::ji("-1")` Significant clusters include many false positives.
+- `r emo::ji("-1")` Cluster-wise interpretation.
 - `r emo::ji("-1")` Weak control of the FWER.
 
 --
@@ -415,8 +424,8 @@ class: left, top
 
 ### Control the FWER amoung all cluster depth tests
 
-- Interpreting the univariate cluster depth tests will increase the FWER.
-- We use Troendle (min-p + step-wise arguments) as it is powerful when the tests have different univariate distributions.
+- Interpreting the univariate cluster depth tests increases the FWER.
+- We use Troendle (min-p + step-wise argument) as it is powerful when the tests have different univariate distributions.
 
 
 ### Interpretation

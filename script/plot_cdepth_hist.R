@@ -76,10 +76,9 @@ gg_cdepth_hist <-
   ggplot( aes(x = statistic))+
   geom_histogram(breaks =c(0,0.25,seq(from = data$threshold, to = 12, by = .25)))+
   geom_vline(xintercept = data$threshold)+
-  geom_vline(data= tb_quantile,aes(xintercept = q95),color="red")+
+  #geom_vline(data= tb_quantile,aes(xintercept = q95),color="red")+
   labs(title = "Histogram of maximum of the cluster depths",
-       x = "Statistic",
-       caption="The red lines represent the 95 percentile of the univariate distribution.")+
+       x = "Statistic")+
   facet_grid(rows = vars(depth))+
   theme_jf()+ 
   theme(legend.position='bottom',
