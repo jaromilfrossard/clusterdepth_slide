@@ -14,7 +14,7 @@ design =
 
 ymat<-
   design%>%
-  select(`-200`:`-0.5`)%>%
+  select(`-200`:`600`)%>%
   as.matrix()
 
 design <-
@@ -37,8 +37,9 @@ gg_f<-
   geom_line()+
   geom_point()+
   geom_hline(yintercept = threshold)+
+  geom_vline(xintercept = 0)+
   scale_x_continuous(expand = c(0,0))+
-  labs(x="", y = "F-Statistic")+
+  labs(x=NULL, y = "F-Statistic")+
   theme_jf()
 
 
@@ -50,12 +51,12 @@ gg_p<-
   scale_x_continuous(expand = c(0,0))+
   labs(x="time [ms]", y = "p-value")+
   geom_hline(yintercept = 0.05,colour = "black")+
+  geom_vline(xintercept = 0)+
 #  geom_hline(yintercept = 0.05/ncol(ymat),colour = "red")+
   theme_jf()
 
 gg_bonf<-
   (gg_f/gg_p)+
   plot_annotation(
-    title = 'F-Statistic and p-value under H0',
-    subtitle = 'The horizontal line represents univariate significant\n threshold',
+    title = 'F Statistics and p-values',
     theme = theme_jf())

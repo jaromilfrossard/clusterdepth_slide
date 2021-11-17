@@ -27,7 +27,7 @@ class: center, middle, inverse, title-slide
 ## Massively Univariate Tests for EEG
 ### Jaromil Frossard
 ### University of Geneva
-### 2021/11/14 (updated: 2021-11-16)
+### 2021/11/14 (updated: 2021-11-17)
 
 ---
 
@@ -62,22 +62,20 @@ class: left, middle
 
 ## Table of Content
 
+.large[
 - Testing Conditions in EEG
     - Family wise error rate (FWER)
     - Parametric vs non-parametric tests
 - Max-T/min-p procedure
 - Cluster mass test
+- Threshold free cluster enhancement (TFCE)
 - Cluster depth tests
-
+]
 
 ---
 class: left, top
 
-
 ## Testing Conditions in EEG
-
-
-
 
 ![](index_files/figure-html/erps-1.svg)&lt;!-- --&gt;
 
@@ -87,7 +85,7 @@ class: left, top
 ### Multiple Tests
 
 .center[
-600 ms at 512Hz = 614 Time-Points!
+.large[600 ms at 512Hz = 614 Time-Points!]
 ]
 
 
@@ -95,12 +93,11 @@ class: left, top
 
 - Pre-selecting a few tests (*a prior* knowledge, miss effects)
 - Average over a time frame (*a prior* knowledge, interpretation on the time window)
-- Testing all time-points (increase FWER) 👎
-- Testing all time-points + multiple comparisons procedure. 👍
+- ➖ Testing all time-points (increase FWER).
+- ➕ Testing all time-points + multiple comparisons procedure. 
 
---
 
-#### Multiple comparisons procedure:
+#### Multiple comparisons procedures:
 
 - Parametric: Bonferroni (Dunn 1958), Holm (Holm 1979)
 - Point-wise non-parametric: min-p/max-T (Westfall and Young 1993) , Troendle (Troendle 1995)
@@ -110,7 +107,7 @@ class: left, top
 
 
 ---
-class: center, top
+class: center, middle
 
 ![](index_files/figure-html/bonf-1.svg)&lt;!-- --&gt;
 
@@ -120,64 +117,28 @@ class: left, top
 ### Family-Wise Error Rate
 
 #### Definition
-- `\(\text{FWER} = \text{Prob}(\text{At least 1 type 1 Error})\)`.
+- `\(\text{FWER}_{\text{H}0} = \text{Prob}(\text{At least 1 type 1 Error})\)`.
 - Probability of reporting at least one false positive.
 
-&lt;!-- When we observe signals of length `\(m\)`, some time points are under the **null hypothesis** the other are under the **alternative hypothesis**. --&gt;
-
---
 
 #### Classification of hypothesis
 
-|       |non-significant|significant|        |
+|       |Non-significant|Significant|        |
 |:------|:-------------:|:---------:|:------:|
 |True H0| U             |V          | m0     |
 |True HA| T             |S          | m - m0 |
 |       |m-R            |R          |m       |
 
 
-
-
----
-class: left, top
-
 #### Bonferroni
 
-- We change the univariate `\(\alpha\)`'s to `\(\alpha/m\)`.
-- We multiply the univariate p-values by `\(m\)`.
-- 👍 We only need univariate p-values.
-- 👎 Low power.
-
-
-
-
-
-
-
-
-
-
-
-&lt;!-- `$$\text{FWER} = \text{Prob}(V&gt;0)$$` --&gt;
-
-
-
-&lt;!-- --- --&gt;
-&lt;!-- class: left, top --&gt;
-
-&lt;!-- #### Example:  --&gt;
-&lt;!-- - Running 10'000 experiments where **only random noise** is observed.  --&gt;
-&lt;!-- - On average, 500 of them contain at least 1 significant time point using the statistical method `\(\mathcal{M}\)`.  --&gt;
-&lt;!-- - `\(\mathcal{M}\)` has a FWER of `\(\text{FWER}=500/10000 = 5\%\)`. --&gt;
-
-&lt;!-- -- --&gt;
-
+- We divide the univariate `\(\alpha\)`'s to `\(\alpha/m\)`.
+- Or, we multiply the univariate p-values by `\(m\)`.
 
 
 
 ---
 class: center, middle, inverse
-
 
 ### Multiple comparisons procedures based on resampling 
 
@@ -187,22 +148,28 @@ class: left, top
 
 ### Max-T/ min-p
 
+
 `\begin{align}
 \text{FWER} &amp;= \text{Prob}_{\text{H}_0}\left(\text{At least one statistic } T_i &gt; \text{critical } T^*\right)\\
 &amp;= \text{Prob}_{\text{H}_0}\left(\text{max}_i(T_i) &gt; \text{critical } T^*\right)
 \end{align}`
 
-.center[
-Same rational with p-values using the minimum!
-]
+💡 Same rational using the minimum of p-values !
 
---
 
-### Distribution of the maximum
+##### Distribution of the maximum
 
 - Depend on the **correlation between the tests**.
-- **No parametric model** of the correlation between test is accurate.
+- **No parametric model** of the correlation between the tests is accurate.
 - **Permutation tests** capture the correlation under H0.
+
+##### Rational of the permutation tests
+
+- Under H0, each permutation of the data has the same probability to be observed.
+- Under H0, any statistics computed on the permutated data has the same probability to be observed.
+- The permuted statistics form a non-parametric distribution which is used for the test.
+
+
 
 ---
 class: left, top
@@ -230,12 +197,13 @@ class: left, middle
 
 ### Pluses and minuses
 
-- 👍 Point-wise interpretation.
-- 👍 Take into account the correlation.
-- 👍 More powerful than Bonferroni-Holm.
-- 👎 Fail when there is to manly equivalent uncorrelated tests.
-- 👎 Do not take into account the spatio-temporal distribution of the tests.
-- 👎 For min-p, when the number of test is too large, we need to increase the number of permutations.
+- ➕ Point-wise interpretation.
+- ➕ Take into account the correlation.
+- ➕ More powerful than Bonferroni-Holm for correlated tests.
+- ➕ Min-p is powerfull when tests have different distributions.
+- ➖ Low power when tests are uncorrelated.
+- ➖ Do not take into account the spatio-temporal distribution of the tests.
+- ➖ If `\(m\)` is large the min-p distribution may be discrete.
 
 
 ### Interpretation
@@ -244,24 +212,25 @@ class: left, middle
 We take an `\(\alpha_{\text{FWER}}\)` level risk when concluding: "All significant time points are under H1".
 ]
 
+
 ---
 class: left, top
 
 ### Step-wise argument
 
-1. **Sort the observed statistics** `\(T_{(1)}&gt;\dots&gt;T_{(i)}&gt;\dots&gt; T_{(m)}\)`.
-2. Use the Bonferroni procedure for the decision of the hypothesis `\(H_{(1)}\)` while considering the hypothesis `\(H_{(1)},\dots,H_{(m)}\)` ($\tilde p_{(1)} =,p_{(1)}$).
+1. **Sort** the observed statistics `\(T_{(1)}&gt;\dots&gt;T_{(i)}&gt;\dots&gt; T_{(m)}\)`.
+2. Use the **Bonferroni** (or min-p) procedure for the decision of the hypothesis `\(H_{(1)}\)` while considering the hypothesis `\(H_{(1)},\dots,H_{(m)}\)`.
 3. If we do not reject `\(H_{(1)}\)`, then we do not reject `\(H_{(1)},\dots,H_{(m)}\)`
 4. If we reject `\(H_{(1)}\)`:
-    + a. If we correctly rejected `\(H_{(1)}\)`. We can  only consider `\(H_{(2)},\dots,H_{(m)}\)` when testing `\(H_{(2)}\)` ( `\(\tilde p_{(2)} =(m-1) p_{(2)}\)` ).
-    + b. We falsely rejected `\(H_{(1)}\)`. We can also only consider `\(H_{(2)},\dots,H_{(m)}\)` when testing `\(H_{(2)}\)` ( `\(\tilde p_{(2)} =(m-1) p_{(2)}\)` ).
+    + a. If we **correctly** rejected `\(H_{(1)}\)`. We can  only consider `\(H_{(2)},\dots,H_{(m)}\)` when testing `\(H_{(2)}\)` ( `\(\tilde p_{(2)} =(m-1) p_{(2)}\)` ).
+    + b. We **falsely** rejected `\(H_{(1)}\)`. We can also only consider `\(H_{(2)},\dots,H_{(m)}\)` when testing `\(H_{(2)}\)` ( `\(\tilde p_{(2)} =(m-1) p_{(2)}\)` ).
 
 --
 
 ### Step-wise procedures
 
-- Bonferroni + Step-wise argument =&gt; Holm
-- min-p + Step-wise argument =&gt; Troendle
+- Bonferroni `\(+\)` Step-wise argument `\(\Rightarrow\)` Holm
+- min-p `\(+\)` Step-wise argument `\(\Rightarrow\)` Troendle
 
 ---
 class: center, middle, inverse
@@ -294,20 +263,20 @@ class: left, top
 
 ### Pluses and minuses
 
-- 👍 Take into account the spatio-temporal position of the tests.
-- 👍 Very powerful.
-- 👎 Significant clusters include many false positives.
-- 👎 Cluster-wise interpretation.
-- 👎 Weak control of the FWER.
+- ➕ Take into account the **spatio-temporal** position of the tests.
+- ➕ Very powerful.
+- ➖ Significant clusters include many false positives.
+- ➖ Cluster-wise interpretation.
+- ➖ Weak control of the FWER.
 
 --
 ### Interpretation
 
 
 .center[
-We take an `\(\alpha_{\text{FWER}}\)` level risk when concluding: "There is at least 1 time point under H1".
+We take an `\(\alpha_{\text{FWER}}\)` level risk when concluding: "The significant cluster contains at least 1 time point under H1".
 
-When **all time points** are under H0, we have a `\(\alpha_{\text{FWER}}\)` probability to observed a significant cluster.
+An "error" is 1 significant cluster with 0 time point under H1.
 ]
 
 ---
@@ -327,9 +296,9 @@ class: left, top
 
 ## Rationale
 
-- Removing the threshold the need of a threshold.
+- Removing the threshold from the algorithm.
 - Integral over all thresholds.
-- Controlling the FWER using a max-T argument.
+- Control the FWER using a max-T argument.
 
 
 `$$\text{TFCE}_s =\int_{h = 0}^{h=T_s} e(h)^E h^H \text{d}h$$`
@@ -338,9 +307,11 @@ class: left, top
 
 --
  
-In EEG, we often use `\(E=0.5\)` and `\(H=1\)` or `\(H=2\)`, depending on the statistic (t or F).
+In EEG, we use `\(E=0.5\)` and `\(H=1\)` or `\(H=2\)`, depending on the statistic (t or F).
 
-When `\(E&lt;1\)`, the influence of the length of a cluster is small. It has the advantage to decreases the risk of false positive at the border of true effects.
+
+1. As `\(E&lt;1\)`, the influence of the length of the clusters is smaller. 
+2. It **decreases the risk of false positive** at the border of true effects.
 
 
 ---
@@ -362,24 +333,29 @@ class: center, middle, inverse
 class: left, top
 
 
-## Rational
+### Rational
+
+From the cluster mass test:
+- We **keep the threshold** defining clusters.
+- We **do not aggregate the statistics**.
 
 
-- From the cluster mass test, we **keep the threshold** defining clusters.
-- We reject the idea of a cluster mass. We **do not aggregate the statistics**.
+We use the **cluster depth**
 
-
-- The cluster depth is the position of a time point __relatively to the border of the cluster__.
-- The cluster depth can be defined "from the head" or "from the tail".
+- It is the position of a time point __relatively to the border of the cluster__.
+- It can be defined *from the head* or *from the tail*.
 
 --
 
-.center[
-We test relatively to the cluster depth: "The first time point a cluster is under H0." 
 
-H0: __No difference at the 1st cluster depth__ from the head.
 
-Then, we generalized to all cluster-depths.
+.large.center[
+💡 What is the distribution of the cluster under H0?
+
+💡 What is the distribution of the 1st point of the cluster?
+
+💡 What is the distribution of the 2nd point of the cluster?
+
 ]
 
 
@@ -398,21 +374,21 @@ class: left, top
 ---
 class: left, top
 
-### Control the FWER amoung all cluster depth tests
+#### Control the FWER amoung all cluster depth tests
 
 - Interpreting the univariate cluster depth tests increases the FWER.
-- We use Troendle (min-p + step-wise argument) as it is powerful when the tests have different univariate distributions.
+- We use **Troendle** (min-p + step-wise argument) as it is powerful when the tests have different univariate distributions.
 
 
-### Interpretation
+#### Interpretation
 
-- We take a `\(\alpha_{\text{FWER}}\)` when we declare: "We found at least one cluster that begins no later than time `\(t_0\)`."
+- We take an `\(\alpha_{\text{FWER}}\)` when we declare: "We found at least one cluster that begins no later than time `\(t\)`."
 
 
-### Work in progress
+#### Work in progress
 
 - Combining cluster depth *from the head* and *from the tail* to find the starting and ending of the clusters. 
-- Implementation in `permuco` (Frossard and Renaud 2021b): the p-values are the time-wise maximal `\(p\)`-values between the cluster depth *from the head* and *from the tail*.
+- In `permuco` (Frossard and Renaud 2021b): the p-values are the time-wise maximal `\(p\)`-values between the cluster depth *from the head* and *from the tail*.
 
 
 

@@ -83,4 +83,3 @@ gg_cl <-
   facet_wrap(~pi)+
   theme_jf()
 
-gg_cl

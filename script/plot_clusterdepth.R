@@ -79,6 +79,8 @@ gg_depth_f <-
   ggplot()+
   geom_line(aes(x=time,y = fstat))+
   geom_hline(yintercept = threshold)+
+  labs(x="Time [ms]",
+       y="F statistic")+
   facet_grid(rows = vars(pi))+
   scale_x_continuous(expand = c(0,0))+
   theme_jf()
@@ -118,6 +120,8 @@ gg_depth_depth <-
   geom_line(data= tb_depth_max, aes(x=clusterdepth,y = fcluster))+
   geom_point(data= tb_depth_max, aes(x=clusterdepth,y = fcluster))+
   geom_hline(yintercept = threshold)+
+  labs(x="Cluster depth",
+       y=NULL)+
   facet_grid(rows = vars(pi))+
   scale_x_continuous(expand = c(0,0))+
   theme_jf()

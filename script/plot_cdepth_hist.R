@@ -78,7 +78,7 @@ gg_cdepth_hist <-
   geom_vline(xintercept = data$threshold)+
   #geom_vline(data= tb_quantile,aes(xintercept = q95),color="red")+
   labs(title = "Histogram of maximum of the cluster depths",
-       x = "Statistic")+
+       x = "F Statistic")+
   facet_grid(rows = vars(depth))+
   theme_jf()+ 
   theme(legend.position='bottom',

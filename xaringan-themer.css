@@ -62,6 +62,10 @@
   --black: #18273F;
 }
 
+.large { font-size: 130% }
+.small { font-size: 70% }
+
+
 html {
   font-size: var(--base-font-size);
 }
