@@ -27,7 +27,7 @@ class: center, middle, inverse, title-slide
 ## Massively Univariate Tests for EEG
 ### Jaromil Frossard
 ### University of Geneva
-### 2021/11/14 (updated: 2021-11-17)
+### 2021/11/14 (updated: 2021-11-18)
 
 ---
 
@@ -117,7 +117,7 @@ class: left, top
 ### Family-Wise Error Rate
 
 #### Definition
-- `\(\text{FWER}_{\text{H}0} = \text{Prob}(\text{At least 1 type 1 Error})\)`.
+- `\(\text{FWER} = \text{Prob}_{\text{H}0}(\text{At least 1 type 1 Error})\)`.
 - Probability of reporting at least one false positive.
 
 
@@ -166,7 +166,7 @@ class: left, top
 ##### Rational of the permutation tests
 
 - Under H0, each permutation of the data has the same probability to be observed.
-- Under H0, any statistics computed on the permutated data has the same probability to be observed.
+- Under H0, any statistics computed on the permuted data has the same probability to be observed.
 - The permuted statistics form a non-parametric distribution which is used for the test.
 
 
@@ -305,13 +305,12 @@ class: left, top
 
 .center[https://benediktehinger.de/blog/science/tag/tfce/]
 
---
  
 In EEG, we use `\(E=0.5\)` and `\(H=1\)` or `\(H=2\)`, depending on the statistic (t or F).
 
 
 1. As `\(E&lt;1\)`, the influence of the length of the clusters is smaller. 
-2. It **decreases the risk of false positive** at the border of true effects.
+2. It **decreases the risk of false positives** at the border of true effects.
 
 
 ---
@@ -345,7 +344,6 @@ We use the **cluster depth**
 - It is the position of a time point __relatively to the border of the cluster__.
 - It can be defined *from the head* or *from the tail*.
 
---
 
 
 
@@ -376,8 +374,9 @@ class: left, top
 
 #### Control the FWER amoung all cluster depth tests
 
-- Interpreting the univariate cluster depth tests increases the FWER.
-- We use **Troendle** (min-p + step-wise argument) as it is powerful when the tests have different univariate distributions.
+- **Do not** directly intepret the univariate cluster depth tests.
+- We use **Troendle** to control the FWER for all cluster depth test. 
+- Troendle is powerful when the tests have different univariate distributions.
 
 
 #### Interpretation

@@ -77,7 +77,7 @@ gg_cl <-
   geom_hline(yintercept = threshold)+
   scale_x_continuous(expand = c(0,0))+
   labs(
-    title = "Th cluster mass test",
+    title = "The cluster mass test",
     x="time [ms]", y = "F-Statistic",
     caption= "Using a pre-defined threshold, we define clusters. For each cluster, we\ncompute the cluster mass as the sum of statistics within the cluster. The\nnull distribution of the cluster mass is computed by permutation.")+
   facet_wrap(~pi)+
