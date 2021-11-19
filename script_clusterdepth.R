@@ -1,8 +1,7 @@
-# Multiple comparison procedure using permuco
+# Multiple comparisons procedures using permuco
 #
 # author: Jaromil Frossard
-# contact:jaromil.frossard@gmail.com
-#
+# email:jaromil.frossard@gmail.com
 
 install.packages("permuco")
 library(permuco)
@@ -41,17 +40,14 @@ mod_cm
 ## list of data frame per effect
 summary(mod_cm,table_type = "full")
 
-
 ## Cluster depth tests with permuco
 ###########################################################
 mod_cd <- clusterlm(signal~visibility*emotion*direction+Error(id/(visibility*emotion*direction)),
                     multcomp = "clusterdepth", data = design)
 
-
 plot(mod_cd)
 
 mod_cd
-
 
 summary(mod_cd,table_type = "full")
 

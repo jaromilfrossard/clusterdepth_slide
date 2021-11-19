@@ -27,7 +27,7 @@ class: center, middle, inverse, title-slide
 ## Massively Univariate Tests for EEG
 ### Jaromil Frossard
 ### University of Geneva
-### 2021/11/14 (updated: 2021-11-18)
+### 2021/11/14 (updated: 2021-11-19)
 
 ---
 
@@ -85,7 +85,7 @@ class: left, top
 ### Multiple Tests
 
 .center[
-.large[600 ms at 512Hz = 614 Time-Points!]
+.large[600 ms at 1024Hz = 614 Time-Points!]
 ]
 
 
@@ -269,7 +269,7 @@ class: left, top
 - ➖ Cluster-wise interpretation.
 - ➖ Weak control of the FWER.
 
---
+
 ### Interpretation
 
 
@@ -309,8 +309,8 @@ class: left, top
 In EEG, we use `\(E=0.5\)` and `\(H=1\)` or `\(H=2\)`, depending on the statistic (t or F).
 
 
-1. As `\(E&lt;1\)`, the influence of the length of the clusters is smaller. 
-2. It **decreases the risk of false positives** at the border of true effects.
+- As `\(E&lt;1\)`, the influence of the length of the clusters is smaller. 
+- It **decreases the risk of false positives** at the border of true effects.
 
 
 ---
@@ -332,7 +332,17 @@ class: center, middle, inverse
 class: left, top
 
 
-### Rational
+#### Rational
+
+.large.center[
+💡 What is the distribution of the cluster under H0?
+
+💡 What is the distribution of the 1st time point of a cluster?
+
+💡 What is the distribution of the 2nd time point of a cluster?
+
+]
+
 
 From the cluster mass test:
 - We **keep the threshold** defining clusters.
@@ -347,14 +357,7 @@ We use the **cluster depth**
 
 
 
-.large.center[
-💡 What is the distribution of the cluster under H0?
 
-💡 What is the distribution of the 1st point of the cluster?
-
-💡 What is the distribution of the 2nd point of the cluster?
-
-]
 
 
 ---
@@ -369,6 +372,9 @@ class: left, top
 ![](index_files/figure-html/cdepth_hist-1.svg)&lt;!-- --&gt;
 
 
+---
+class: left, top
+![](index_files/figure-html/cdepth_mat-1.png)&lt;!-- --&gt;
 ---
 class: left, top
 
@@ -417,7 +423,7 @@ github: https://github.com/jaromilfrossard/permuco4brain/
 website: jaromilfrossard.github.io/permuco4brain/
 
 
-[Rscript](https://github.com/jaromilfrossard/clusterdepth_slide/blob/main/script_clusterdepth.R)
+[🔗 Rscript](https://github.com/jaromilfrossard/clusterdepth_slide/blob/main/script_clusterdepth.R)
 
 ---
 class: left, top

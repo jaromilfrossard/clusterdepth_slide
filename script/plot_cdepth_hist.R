@@ -77,12 +77,27 @@ gg_cdepth_hist <-
   geom_histogram(breaks =c(0,0.25,seq(from = data$threshold, to = 12, by = .25)))+
   geom_vline(xintercept = data$threshold)+
   #geom_vline(data= tb_quantile,aes(xintercept = q95),color="red")+
-  labs(title = "Histogram of maximum of the cluster depths",
+  labs(title = "Histogram of the cluster depth tests",
        x = "F Statistic")+
   facet_grid(rows = vars(depth))+
   theme_jf()+ 
   theme(legend.position='bottom',
         legend.title = element_blank())
   
-
+gg_cdepth_matrix<-
+  data$cdepth%>%
+  select(depth_1:depth_5)%>%
+  rename(`1st depth` = depth_1,
+         `2nd depth` = depth_2,
+         `3rd depth` = depth_3,
+         `4th depth` = depth_4,
+         `5th depth` = depth_5)%>%
+  GGally::ggpairs(
+    upper = list(continuous = "points"),
+    lower = list(continuous ="blank"),
+    diag = list(continuous = "blank"),
+    progress = F,
+    bins = 40)+
+  theme_jf()+
+  labs(title = "Correlation of the cluster depth tests")
 
