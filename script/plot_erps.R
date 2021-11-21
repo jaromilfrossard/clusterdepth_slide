@@ -15,7 +15,7 @@ gg_erps<-
   scale_y_reverse()+
   scale_x_continuous(expand = c(0,0))+
   labs(title = "Erps for 15 subjects in 2 conditions",
-       subtitle = "Channel P07. Sampling rate: 512Hz",
+       subtitle = "Channel P07. Sampling rate: 1024Hz",
        y = "EEG signal",
        x = "time [ms]",
        caption ="source: (Tipura, Renaud, and Pegna 2019)")+

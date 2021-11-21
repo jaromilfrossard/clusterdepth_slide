@@ -1,7 +1,7 @@
 ---
 title: "The Cluster Depth Tests"
 subtitle: "Massively Univariate Tests for EEG"
-author: "Jaromil Frossard"
+author: "Jaromil Frossard & Olivier Renaud"
 institute: "University of Geneva"
 date: "2021/11/14 (updated: `r Sys.Date()`)"
 output:
@@ -82,7 +82,7 @@ gg_erps
 ---
 class: left, top
 
-### Multiple Tests
+### Multiple Comparisons Problem
 
 .center[
 .large[600 ms at 1024Hz = 614 Time-Points!]
