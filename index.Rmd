@@ -3,7 +3,7 @@ title: "The Cluster Depth Tests"
 subtitle: "Massively Univariate Tests for EEG"
 author: "Jaromil Frossard & Olivier Renaud"
 institute: "University of Geneva"
-date: "2021/11/14 (updated: `r Sys.Date()`)"
+date: "2021/11/22 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
     css: xaringan-themer.css
@@ -132,7 +132,7 @@ class: left, top
 |       |m-R            |R          |m       |
 
 
-#### Bonferroni
+#### Bonferroni procedure
 
 - We divide the univariate $\alpha$'s to $\alpha/m$.
 - Or, we multiply the univariate p-values by $m$.
@@ -224,14 +224,15 @@ We take an $\alpha_{\text{FWER}}$ level risk when concluding: "All significant t
 ---
 class: left, top
 
-### Step-wise argument
+### Step-wise procedures
 
 1. **Sort** the observed statistics $T_{(1)}>\dots>T_{(i)}>\dots> T_{(m)}$.
 2. Use the **Bonferroni** (or min-p) procedure for the decision of the hypothesis $H_{(1)}$ while considering the hypothesis $H_{(1)},\dots,H_{(m)}$.
 3. If we do not reject $H_{(1)}$, then we do not reject $H_{(1)},\dots,H_{(m)}$
 4. If we reject $H_{(1)}$:
-    + a. If we **correctly** rejected $H_{(1)}$. We can  only consider $H_{(2)},\dots,H_{(m)}$ when testing $H_{(2)}$ ( $\tilde p_{(2)} =(m-1) p_{(2)}$ ).
-    + b. We **falsely** rejected $H_{(1)}$. We can also only consider $H_{(2)},\dots,H_{(m)}$ when testing $H_{(2)}$ ( $\tilde p_{(2)} =(m-1) p_{(2)}$ ).
+    + a. If we **correctly** rejected $H_{(1)}$. The number of test under H0 is maximum $m-1$.
+    + b. We **falsely** rejected $H_{(1)}$. We already commit a false discovery.
+    + In both cases, we only consider $H_{(2)},\dots,H_{(m)}$ when testing $H_{(2)}$ ( $\tilde p_{(2)} =(m-1) p_{(2)}$).
 
 --
 
@@ -244,7 +245,7 @@ class: left, top
 class: center, middle, inverse
 
 
-# Cluster-based resampling procedure: the cluster mass test
+# Cluster-based multiple comparisons procedure: the cluster mass test
 
 ---
 class: left, top
@@ -313,7 +314,7 @@ class: left, top
 ## Rationale
 
 - Removing the threshold from the algorithm.
-- Integral over all thresholds.
+- Integrating over all thresholds.
 - Control the FWER using a max-T argument.
 
 
@@ -355,9 +356,9 @@ class: left, top
 .large.center[
 `r emo::ji("idea")` What is the distribution of the cluster under H0?
 
-`r emo::ji("idea")` What is the distribution of the 1st time point of a cluster?
+`r emo::ji("idea")` What is the distribution of its 1st time point under H0?
 
-`r emo::ji("idea")` What is the distribution of the 2nd time point of a cluster?
+`r emo::ji("idea")` What is the distribution of its 2nd time point under H0?
 
 ]
 
@@ -414,7 +415,7 @@ class: left, top
 - We take an $\alpha_{\text{FWER}}$ when we declare: "We found at least one cluster that begins no later than time $t$."
 
 
-#### Work in progress
+#### Head and Tail
 
 - Combining cluster depth *from the head* and *from the tail* to find the starting and ending of the clusters. 
 - In `permuco` (Frossard and Renaud 2021b): the p-values are the time-wise maximal $p$-values between the cluster depth *from the head* and *from the tail*.
